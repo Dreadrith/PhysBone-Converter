@@ -5,6 +5,8 @@ Of course, it's not perfect but it does almost the inverse conversion of PhysBon
 ![window](https://raw.githubusercontent.com/Dreadrith/DreadScripts/main/Other/Info_Source/PhysBoneConverter/toolwindow.png)
 
 # How to use
+Prerequisites: <a href=https://vrchat.com/home/download>VRCAvatars SDK</a> & <a href=https://assetstore.unity.com/packages/tools/animation/dynamic-bone-16743>Dynamic Bone</a> OR <a href=https://github.com/Markcreator/VRChat-Tools>Dynamic Bone Container</a>
+
 Find the tool's window near the top left corner of Unity under<br>
 DreadTools > Utility > PhysBone Converter
 
