@@ -152,7 +152,8 @@ namespace DreadScripts.PhysBoneConverter
                     {
                         parent = rootTransform,
                         localPosition = Vector3.zero,
-                        localRotation = Quaternion.identity
+                        localRotation = Quaternion.identity,
+                        localScale = Vector3.one
                     }
                 };
             }
@@ -163,7 +164,8 @@ namespace DreadScripts.PhysBoneConverter
                 {
                     parent = colliderParent.transform,
                     localPosition = pbc.position,
-                    localRotation = pbc.rotation
+                    localRotation = pbc.rotation,
+                    localScale = Vector3.one
                 }
             };
             GameObjectUtility.EnsureUniqueNameForSibling(colliderTarget);
@@ -174,17 +176,16 @@ namespace DreadScripts.PhysBoneConverter
             if (isPlane) baseCollider = colliderTarget.AddComponent<DynamicBonePlaneCollider>();
                 else baseCollider = colliderTarget.AddComponent<DynamicBoneCollider>();
 
-            colliderTarget.AddComponent<DynamicBoneCollider>();
 
             baseCollider.m_Bound = (DynamicBoneColliderBase.Bound) (pbc.insideBounds ? 1 : 0);
             baseCollider.m_Center = Vector3.zero;
-            baseCollider.m_Direction = DynamicBoneColliderBase.Direction.Z;
+            baseCollider.m_Direction = DynamicBoneColliderBase.Direction.Y;
 
             if (!isPlane)
             {
-                var colider = (DynamicBoneCollider)baseCollider;
-                colider.m_Radius = pbc.radius;
-                colider.m_Height = pbc.height;
+                var collider = (DynamicBoneCollider)baseCollider;
+                collider.m_Radius = pbc.radius;
+                collider.m_Height = pbc.height;
             }
 
             colliderDictionary.Add(pbc, baseCollider);
@@ -223,7 +224,7 @@ namespace DreadScripts.PhysBoneConverter
                    bool hasAnglecurve = pb.maxAngleXCurve != null && pb.maxAngleXCurve.keys.Length > 0;
                    dbone.m_Stiffness = hasAnglecurve ? 1 : AngleToStiffnessCurve.Evaluate(pb.maxAngleX);
 
-                   dbone.m_StiffnessDistrib = SmoothCurveTangents(DeriveCurve(GenerateSubdividedCurve(pb.maxAngleXCurve, 10, false), k =>
+                   dbone.m_StiffnessDistrib = SmoothCurveTangents(DeriveCurve(SubdivideCurve(pb.maxAngleXCurve, 10, false), k =>
                    {
                        k.value = AngleToStiffnessCurve.Evaluate(k.value * 180);
                        return k;
@@ -238,7 +239,7 @@ namespace DreadScripts.PhysBoneConverter
 
             dbone.m_Exclusions = pb.ignoreTransforms;
             dbone.m_Colliders = pb.colliders.Cast<VRCPhysBoneCollider>()
-                .Where(pbc => colliderDictionary.ContainsKey(pbc))
+                .Where(pbc => pbc && colliderDictionary.ContainsKey(pbc))
                 .Select(pbc => colliderDictionary[pbc]).ToList();
 
 
@@ -293,19 +294,24 @@ namespace DreadScripts.PhysBoneConverter
                 k.outTangent = -k.outTangent;
                 return k;
             });
-        private static AnimationCurve GenerateSubdividedCurve(AnimationCurve curve, int keyLimit = 10, bool smoothCurve = true)
+        private static AnimationCurve SubdivideCurve(AnimationCurve curve, int keyLimit = 10, bool smoothCurve = true)
         {
             if (curve == null) return null;
+            if (curve.length <= 1) return curve;
             List<Keyframe> keys = new List<Keyframe>(curve.keys);
-            while (keys.Count < keyLimit)
+            if (keys.Count > 1)
             {
-                var currentKeys = keys.ToList();
-                for (int i = 0; i < currentKeys.Count-1 && keys.Count < keyLimit; i++)
+                while (keys.Count < keyLimit)
                 {
-                    var time = currentKeys[i].time + currentKeys[i+1].time / 2;
-                    keys.Add(new Keyframe(time, curve.Evaluate(time)));
+                    var currentKeys = keys.OrderBy(k => k.time).ToList();
+                    for (int i = 0; i < currentKeys.Count - 1 && keys.Count < keyLimit; i++)
+                    {
+                        var time = (currentKeys[i].time + currentKeys[i + 1].time) / 2;
+                        keys.Add(new Keyframe(time, curve.Evaluate(time)));
+                    }
                 }
             }
+
 
             var newCurve = new AnimationCurve(keys.ToArray());
             if (smoothCurve) SmoothCurveTangents(newCurve);
