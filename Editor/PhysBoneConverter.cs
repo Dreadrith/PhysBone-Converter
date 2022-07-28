@@ -214,7 +214,6 @@ namespace DreadScripts.PhysBoneConverter
             dbone.m_RadiusDistrib = pb.radiusCurve;
             dbone.m_Gravity = new Vector3(0, -pb.gravity / 10f, 0);
 
-
             //Better Limit conversion, such as Hinge to Freeze Axis, can be done, but not all possibilities with PhysBone limits can be achieved.
            if (bools[2])
            {
@@ -334,7 +333,7 @@ namespace DreadScripts.PhysBoneConverter
             {
                 string errorMSG =  $"{e.Message}\n\n{e.StackTrace}";
                 if (EditorUtility.DisplayDialog("Error!", $"An unexpected error has occured and execution was halted. Please Press Copy and report this stack trace to Dreadrith#3238\n~~~~~~~~~~~~\n{errorMSG}", "Copy", "Nah"))
-                    EditorGUIUtility.systemCopyBuffer = e.StackTrace;
+                    EditorGUIUtility.systemCopyBuffer = errorMSG;
                 throw;
             }
         }
