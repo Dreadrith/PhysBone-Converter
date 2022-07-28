@@ -265,7 +265,7 @@ namespace DreadScripts.PhysBoneConverter
             dbone.m_ReferenceObject = targetRoot.transform;
         }
 
-        private static bool IsExcluded(Transform t, IEnumerable<Transform> exclusions) => exclusions.Any(t.IsChildOf);
+        private static bool IsExcluded(Transform t, IEnumerable<Transform> exclusions) => exclusions.Any(e => e != null && t.IsChildOf(e));
         #endregion
 
         #region Curve Functions
