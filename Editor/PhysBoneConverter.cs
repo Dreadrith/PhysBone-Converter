@@ -271,6 +271,7 @@ namespace DreadScripts.PhysBoneConverter
         #region Curve Functions
         private static AnimationCurve SmoothCurveTangents(AnimationCurve curve)
         {
+            if (curve == null) return null;
             for (int i = 0; i < curve.keys.Length; i++)
                 curve.SmoothTangents(i, 0);
             return curve;
