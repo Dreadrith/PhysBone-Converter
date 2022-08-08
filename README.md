@@ -5,8 +5,7 @@ Of course, it's not perfect but it does almost the inverse conversion of PhysBon
 ![window](https://raw.githubusercontent.com/Dreadrith/DreadScripts/main/Other/Info_Source/PhysBoneConverter/toolwindow.png)
 
 # How to use
-Prerequisites: <a href=https://vrchat.com/home/download>VRCAvatars SDK</a> & <a href=https://assetstore.unity.com/packages/tools/animation/dynamic-bone-16743>Dynamic Bone</a> OR <a href=https://github.com/Markcreator/VRChat-Tools>Dynamic Bone Container*</a><br>
-***NOTE:** The container currently has one tiny error with an easy fix. <a href=https://github.com/Dreadrith/PhysBone-Converter/issues/1>Refer to this issue</a>
+Prerequisites: <a href=https://vrchat.com/home/download>VRCAvatars SDK</a> & <a href=https://assetstore.unity.com/packages/tools/animation/dynamic-bone-16743>Dynamic Bone</a> OR <a href=https://github.com/VRLabs/Dynamic-Bones-Stub/releases/latest/download/Dynamic_Bones_v1.3.2_Stub.unitypackage>Dynamic Bone Stub</a><br>
 
 Find the tool's window near the top left corner of Unity under<br>
 DreadTools > Utility > PhysBone Converter
@@ -23,7 +22,7 @@ Issue: DreadTools button doesn't appear on the top toolbar<br>
 Solution: Your project has a script error which prevents new scripts from loading. Check your console for errors and read them for details about what's causing them. Below are some common errors
 
 Issue: Error: the type or namespace name 'DynamicBoneColliderBase' could not be found.<br>
-Solution: You either don't have Dynamic Bones or your dynamic bones version doesn't match the one this script is made for. This was made for 1.2.x as it's the most common version. Try using the Dynamic Bone Container listed above instead
+Solution: You either don't have Dynamic Bones or your dynamic bones version doesn't match the one this script is made for. This was made for 1.2.x as it's the most common version. Try using the Dynamic Bone Stub listed above instead
 
 Issue: Error: The type or namespace name 'VRCPhysBoneCollider' could not be found<br>
 Issue: Error: 'VRCPhysBone' does not contain a definition for 'maxAngleXCurve'...<br>
